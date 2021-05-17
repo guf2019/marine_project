@@ -54,6 +54,19 @@ class MongoDriver:
         except Exception as e:
             print(e)
 
+    def find_all(self):
+        self.__prepare()
+        current_pos = 0
+        while True:
+            try:
+                all_docs = self.collection.find(no_cursor_timeout=True).skip(current_pos)
+                for doc in all_docs:
+                    current_pos += 1
+                    yield doc
+                break
+            except:
+                self.__prepare()
+
     def is_in(self, index=None, value=None):
         self.__prepare()
         return self.collection.find_one({index: value}) is not None

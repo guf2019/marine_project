@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter.ttk import Combobox
 # from window_funcs import *
 from database.Mongodriver import MongoDriver
+import random
 
 
 def _expand_(data):
@@ -33,10 +34,15 @@ def state_input_student_name():
 def state_random_test():
     clearFrame()
     _expand_(MAIN_WINDOW_SETTINGS.TEST_STATE)
-    MAIN_WINDOW_SETTINGS.INPUT_NAME[0] = get_random_test()
+    get_random_questions()
 
-def get_random_test():
-    pass
+
+def get_random_questions():
+    try:
+        questions = list(MAIN_WINDOW_SETTINGS.db_questions.find_all())
+        return questions[random.randint(0, len(questions))]
+    except Exception as e:
+        return 0
 
 
 def send_message():

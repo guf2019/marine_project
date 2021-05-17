@@ -50,15 +50,26 @@ def state_random_test():
     clearFrame()
     _expand_(MAIN_WINDOW_SETTINGS.TEST_STATE)
     que = get_random_questions()
-    MAIN_WINDOW_SETTINGS.LABEL_RANDOM_QUEST[0].config(text=que['question'])
-    MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_1[0].config(text=que['answer'][0])
-    MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_2[0].config(text=que['answer'][1])
-    MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_3[0].config(text=que['answer'][2])
-    MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_4[0].config(text=que['answer'][3])
+    if que:
+        MAIN_WINDOW_SETTINGS.CURRENT_ANSWER = que['correct']
+        MAIN_WINDOW_SETTINGS.LABEL_RANDOM_QUEST[0].config(text=que['question'])
+        MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_1[0].config(text='1.' + que['answer'][0])
+        MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_2[0].config(text='2.' + que['answer'][1])
+        MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_3[0].config(text='3.' + que['answer'][2])
+        MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_4[0].config(text='4.' + que['answer'][3])
+    else:
+        start_state()
 
 
 def check_answer():
-    pass
+    if MAIN_WINDOW_SETTINGS.INPUT_CUR[0].get() == MAIN_WINDOW_SETTINGS.CURRENT_ANSWER:
+        user = MAIN_WINDOW_SETTINGS.db_users.find_one('id', MAIN_WINDOW_SETTINGS.CURRENT_USER)
+        user['score'] += 1
+        MAIN_WINDOW_SETTINGS.db_users.update(user)
+        state_random_test()
+    else:
+        state_random_test()
+
 
 def get_random_questions():
     try:
@@ -70,8 +81,12 @@ def get_random_questions():
 
 def send_message():
     text = MAIN_WINDOW_SETTINGS.INPUT_NAME[0].get()
-    _id = get_id()
-    MAIN_WINDOW_SETTINGS.db_users.push({'id': _id, 'name': text, 'score': 0})
+    if not MAIN_WINDOW_SETTINGS.db_users.is_in('name', text):
+        _id = get_id()
+        MAIN_WINDOW_SETTINGS.db_users.push({'id': _id, 'name': text, 'score': 0})
+    _id = MAIN_WINDOW_SETTINGS.db_users.find_one('name', text)['id']
+    MAIN_WINDOW_SETTINGS.CURRENT_USER = _id
+    MAIN_WINDOW_SETTINGS.INPUT_NAME[0].delete(0, END)
     state_random_test()
 
 
@@ -82,13 +97,12 @@ def get_id():
     except Exception as e:
         return 0
 
+
 def get_id_question():
     try:
         return MAIN_WINDOW_SETTINGS.db_questions.get_last_item() + 1
     except:
         return 0
-
-
 
 
 def state_teacher_password():
@@ -133,7 +147,7 @@ def add_4quest():
         quest['question'] = MAIN_WINDOW_SETTINGS.INPUT_QUEST[0].get()
         quest['answer'] = [MAIN_WINDOW_SETTINGS.INPUT_ANS1[0].get(), MAIN_WINDOW_SETTINGS.INPUT_ANS2[0].get(),
                            MAIN_WINDOW_SETTINGS.INPUT_ANS3[0].get(), MAIN_WINDOW_SETTINGS.INPUT_ANS4[0].get()]
-        quest['correct'] = int(MAIN_WINDOW_SETTINGS.INPUT_CUR_ANS1[0].get())
+        quest['correct'] = MAIN_WINDOW_SETTINGS.INPUT_CUR_ANS1[0].get()
         MAIN_WINDOW_SETTINGS.db_questions.push(quest)
         MAIN_WINDOW_SETTINGS.INPUT_QUEST[0].delete(0, END)
         MAIN_WINDOW_SETTINGS.INPUT_ANS1[0].delete(0, END)
@@ -186,6 +200,8 @@ class MAIN_WINDOW_SETTINGS:
     HEIGHT = '800'
     WIDTH = '1000'
     TITLE = 'Приложение для проведения тестирования'
+    CURRENT_ANSWER = None
+    CURRENT_USER = None
 
     ##### СТАРТОВОЕ СОСТОЯНИЕ ########
     LABEL_START = [Label(MAIN_WINDOW, text='Добро пожаловать в приложение для тестирования!!!'), int(DEFAULT_WIDTH) // 2, 0]
@@ -210,11 +226,16 @@ class MAIN_WINDOW_SETTINGS:
     #### СОСТОЯНИЕ СЛУЧАЙНОГО ТЕСТА #####
     LABEL_RANDOM_TEST = [Label(MAIN_WINDOW, text='Выберите 1 ответ на вопрос:'), 0, 0]
     LABEL_RANDOM_QUEST = [Label(MAIN_WINDOW, text='', ), 45, 70]
-    BUTTON_INPUT_TEST_1 = [Checkbutton(MAIN_WINDOW, text='1', command=check_answer), 140, +140]
-    BUTTON_INPUT_TEST_2 = [Checkbutton(MAIN_WINDOW, text='2', command=check_answer), 0, +280]
-    BUTTON_INPUT_TEST_3 = [Checkbutton(MAIN_WINDOW, text='3', command=check_answer), 0, +140]
-    BUTTON_INPUT_TEST_4 = [Checkbutton(MAIN_WINDOW, text='4', command=check_answer), 140, +280]
-    TEST_STATE = [LABEL_RANDOM_TEST, LABEL_RANDOM_QUEST, BUTTON_INPUT_TEST_1, BUTTON_INPUT_TEST_2, BUTTON_INPUT_TEST_3, BUTTON_INPUT_TEST_4]
+    BUTTON_INPUT_TEST_1 = [Label(MAIN_WINDOW, text='1',), 0, +110]
+    BUTTON_INPUT_TEST_2 = [Label(MAIN_WINDOW, text='2',), 0, +150]
+    BUTTON_INPUT_TEST_3 = [Label(MAIN_WINDOW, text='3',), 0, +190]
+    BUTTON_INPUT_TEST_4 = [Label(MAIN_WINDOW, text='4',), 0, +230]
+    BUTTON_CHECK = [Button(MAIN_WINDOW, text='Проверить', command=check_answer), 0, 310]
+    INPUT_CUR = [Combobox(MAIN_WINDOW, state="readonly"), 0, 270]
+    INPUT_CUR[0]['values'] = (1, 2, 3, 4)
+    INPUT_CUR[0].current(0)
+    TEST_STATE = [LABEL_RANDOM_TEST, LABEL_RANDOM_QUEST, BUTTON_CHECK, INPUT_CUR, BUTTON_INPUT_TEST_1, BUTTON_INPUT_TEST_2, BUTTON_INPUT_TEST_3,
+                  BUTTON_INPUT_TEST_4]
 
     ##### СОСТОЯНИЕ УЧИТЕЛЯ PASSWORD########
     INPUT_TEACHER_PASSWORD = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, 0]

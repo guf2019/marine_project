@@ -75,7 +75,7 @@ class App:
         GCheckBox_50["command"] = self.GCheckBox_50_command
 # чекбокс
         GCheckBox_906=tk.Checkbutton(root)
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Times', size=10)
         GCheckBox_906["font"] = ft
         GCheckBox_906["fg"] = "#333333"
         GCheckBox_906["justify"] = "center"

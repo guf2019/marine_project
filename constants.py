@@ -14,8 +14,7 @@ def clearFrame():
 
 
 def start_state():
-    for widget in MAIN_WINDOW_SETTINGS.START_STATE:
-        widget[0].place(x=widget[1], y=widget[2])
+    _expand_(MAIN_WINDOW_SETTINGS.START_STATE)
 
 
 def func_student():
@@ -30,6 +29,10 @@ def state_input_student_name():
 def state_random_test():
     clearFrame()
     _expand_(MAIN_WINDOW_SETTINGS.TEST_STATE)
+    MAIN_WINDOW_SETTINGS.INPUT_NAME[0] = get_random_test()
+
+def get_random_test():
+    pass
 
 
 def send_message():
@@ -120,7 +123,7 @@ class MAIN_WINDOW_SETTINGS:
     START_STATE = [LABEL_START, BUTTON_START1, BUTTON_START2]
 
     ##### СОСТОЯНИЕ ВВОДА ИМЕНИ #####
-    LABEL_INPUT_NAME = [Label(MAIN_WINDOW, text='Введите имя и фамилию через запятую:'), 0, 0]
+    LABEL_INPUT_NAME = [Label(MAIN_WINDOW, text='Введите имя и фамилию через пробел:'), 0, 0]
     INPUT_NAME = [Entry(MAIN_WINDOW), 0, +30]
     BUTTON_INPUT_NAME = [Button(MAIN_WINDOW, text='Oтправить', command=send_message), 0, +70]
     INPUT_STATE = [LABEL_INPUT_NAME, INPUT_NAME, BUTTON_INPUT_NAME]
@@ -132,6 +135,7 @@ class MAIN_WINDOW_SETTINGS:
     BUTTON_INPUT_TEST_3 = [Button(MAIN_WINDOW, text='3', command=send_message), 0, +70]
     BUTTON_INPUT_TEST_4 = [Button(MAIN_WINDOW, text='4', command=send_message), +70, +140]
     TEST_STATE = [LABEL_RANDOM_TEST, BUTTON_INPUT_TEST_1, BUTTON_INPUT_TEST_2, BUTTON_INPUT_TEST_3, BUTTON_INPUT_TEST_4]
+
     ##### СОСТОЯНИЕ УЧИТЕЛЯ PASSWORD########
     INPUT_TEACHER_PASSWORD = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, 0]
     PASSWORD = '123'

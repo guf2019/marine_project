@@ -9,7 +9,7 @@ class MongoDriver:
         self.__init(self.db_name, self.collection_name)
 
     def __init(self, db_name, collection_name):
-        self.client = MongoClient()
+        self.client = MongoClient(connectTimeoutMS=300000, serverSelectionTimeoutMS = 300000)
         self.db = self.client[db_name]
         self.collection = self.db[collection_name]
 
@@ -31,6 +31,19 @@ class MongoDriver:
     def get_last_item(self, param='id'):
         self.__prepare()
         return self.collection.count()
+
+    def find_all(self):
+        self.__prepare()
+        current_pos = 0
+        while True:
+            try:
+                all_docs = self.collection.find(no_cursor_timeout=True).skip(current_pos)
+                for doc in all_docs:
+                    current_pos += 1
+                    yield doc
+                break
+            except:
+                self.__prepare()
 
     def is_empty(self):
         self.__prepare()

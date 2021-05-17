@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter.ttk import Combobox
+from tkinter import scrolledtext
 # from window_funcs import *
 from database.Mongodriver import MongoDriver
 
@@ -20,6 +21,20 @@ def start_state():
 
 def state_rating():
     clearFrame()
+    _expand_(MAIN_WINDOW_SETTINGS.RATING_STATE)
+    MAIN_WINDOW_SETTINGS.SCROLLED_RATING[0].configure(state='normal')
+    MAIN_WINDOW_SETTINGS.SCROLLED_RATING[0].delete('1.0', END)
+    rating = ''
+    users = []
+    for user in MAIN_WINDOW_SETTINGS.db_users.find_all():
+        users.append(user)
+
+    users.sort(key=lambda x: x['score'], reverse=True)
+    for user in users:
+        rating += 'Имя: ' + ' ' + user['name'] + '. Рейтинг: ' + str(user['score']) + '\n'
+
+    MAIN_WINDOW_SETTINGS.SCROLLED_RATING[0].insert(INSERT, rating)
+    MAIN_WINDOW_SETTINGS.SCROLLED_RATING[0].configure(state = 'disabled')
 
 def func_student():
     clearFrame()
@@ -155,12 +170,18 @@ class MAIN_WINDOW_SETTINGS:
     TITLE = 'Приложение для проведения тестирования'
 
     ##### СТАРТОВОЕ СОСТОЯНИЕ ########
-    LABEL_START = [Label(MAIN_WINDOW, text='Выберите кто вы'), int(DEFAULT_WIDTH) // 2, 0]
+    LABEL_START = [Label(MAIN_WINDOW, text='Добро пожаловать в приложение для тестирования!!!'), int(DEFAULT_WIDTH) // 2, 0]
     BUTTON_START1 = [Button(MAIN_WINDOW, text='Ученик', command=func_student), int(DEFAULT_WIDTH) // 6 * 2, int(DEFAULT_HEIGHT) // 2]
     BUTTON_START2 = [Button(MAIN_WINDOW, text='Учитель', command=state_teacher_password), int(DEFAULT_WIDTH) // 6 * 4, int(DEFAULT_HEIGHT) // 2]
     BUTTON_RATING = [Button(MAIN_WINDOW, text='Рейтинг', command=state_rating), int(DEFAULT_WIDTH) // 2,
                      int(DEFAULT_HEIGHT) // 3 * 2]
     START_STATE = [LABEL_START, BUTTON_START1, BUTTON_START2, BUTTON_RATING]
+
+    #### РЕЙТИНГ ####
+    SCROLLED_RATING = [scrolledtext.ScrolledText(MAIN_WINDOW, width=200, height=50), 0, 0]
+    RETURN_RATING = [Button(MAIN_WINDOW, text='Вернуться', command=start_state),
+                      int(DEFAULT_WIDTH) // 10 * 9, int(DEFAULT_HEIGHT) // 10 * 9]
+    RATING_STATE = [SCROLLED_RATING, RETURN_RATING]
 
     ##### СОСТОЯНИЕ ВВОДА ИМЕНИ #####
     LABEL_INPUT_NAME = [Label(MAIN_WINDOW, text='Введите имя и фамилию через запятую:'), 0, 0]
@@ -175,6 +196,7 @@ class MAIN_WINDOW_SETTINGS:
     BUTTON_INPUT_TEST_3 = [Button(MAIN_WINDOW, text='3', command=send_message), 0, +70]
     BUTTON_INPUT_TEST_4 = [Button(MAIN_WINDOW, text='4', command=send_message), +70, +140]
     TEST_STATE = [LABEL_RANDOM_TEST, BUTTON_INPUT_TEST_1, BUTTON_INPUT_TEST_2, BUTTON_INPUT_TEST_3, BUTTON_INPUT_TEST_4]
+
     ##### СОСТОЯНИЕ УЧИТЕЛЯ PASSWORD########
     INPUT_TEACHER_PASSWORD = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, 0]
     PASSWORD = '123'

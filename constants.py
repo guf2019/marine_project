@@ -3,6 +3,7 @@ from tkinter.ttk import Combobox
 from tkinter import scrolledtext
 # from window_funcs import *
 from database.Mongodriver import MongoDriver
+import random
 
 
 def _expand_(data):
@@ -48,6 +49,15 @@ def state_input_student_name():
 def state_random_test():
     clearFrame()
     _expand_(MAIN_WINDOW_SETTINGS.TEST_STATE)
+    get_random_questions()
+
+
+def get_random_questions():
+    try:
+        questions = list(MAIN_WINDOW_SETTINGS.db_questions.find_all())
+        return questions[random.randint(0, len(questions))]
+    except Exception as e:
+        return 0
 
 
 def send_message():
@@ -184,7 +194,7 @@ class MAIN_WINDOW_SETTINGS:
     RATING_STATE = [SCROLLED_RATING, RETURN_RATING]
 
     ##### СОСТОЯНИЕ ВВОДА ИМЕНИ #####
-    LABEL_INPUT_NAME = [Label(MAIN_WINDOW, text='Введите имя и фамилию через запятую:'), 0, 0]
+    LABEL_INPUT_NAME = [Label(MAIN_WINDOW, text='Введите имя и фамилию через пробел:'), 0, 0]
     INPUT_NAME = [Entry(MAIN_WINDOW), 0, +30]
     BUTTON_INPUT_NAME = [Button(MAIN_WINDOW, text='Oтправить', command=send_message), 0, +70]
     INPUT_STATE = [LABEL_INPUT_NAME, INPUT_NAME, BUTTON_INPUT_NAME]

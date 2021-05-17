@@ -125,7 +125,7 @@ def add_4quest():
         quest['question'] = MAIN_WINDOW_SETTINGS.INPUT_QUEST[0].get()
         quest['answer'] = [MAIN_WINDOW_SETTINGS.INPUT_ANS1[0].get(), MAIN_WINDOW_SETTINGS.INPUT_ANS2[0].get(),
                            MAIN_WINDOW_SETTINGS.INPUT_ANS3[0].get(), MAIN_WINDOW_SETTINGS.INPUT_ANS4[0].get()]
-        quest['correct'] = MAIN_WINDOW_SETTINGS.INPUT_CUR_ANS1[0].get()
+        quest['correct'] = int(MAIN_WINDOW_SETTINGS.INPUT_CUR_ANS1[0].get())
         MAIN_WINDOW_SETTINGS.db_questions.push(quest)
         MAIN_WINDOW_SETTINGS.INPUT_QUEST[0].delete(0, END)
         MAIN_WINDOW_SETTINGS.INPUT_ANS1[0].delete(0, END)
@@ -234,7 +234,7 @@ class MAIN_WINDOW_SETTINGS:
     INPUT_ANS2 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 6]
     INPUT_ANS3 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 8]
     INPUT_ANS4 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 10]
-    INPUT_CUR_ANS1 = [Combobox(MAIN_WINDOW) , int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 12]
+    INPUT_CUR_ANS1 = [Combobox(MAIN_WINDOW, state="readonly") , int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 12]
     INPUT_CUR_ANS1[0]['values'] = (1, 2, 3, 4)
     INPUT_CUR_ANS1[0].current(0)
     BUTTON_ADD_4QUEST = [Button(MAIN_WINDOW, text='Добавить вопрос в базу', command=add_4quest), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 14]

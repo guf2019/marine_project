@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter.ttk import Combobox
+from tkinter import scrolledtext
 # from window_funcs import *
 from database.Mongodriver import MongoDriver
 import random
@@ -21,6 +22,20 @@ def start_state():
 
 def state_rating():
     clearFrame()
+    _expand_(MAIN_WINDOW_SETTINGS.RATING_STATE)
+    MAIN_WINDOW_SETTINGS.SCROLLED_RATING[0].configure(state='normal')
+    MAIN_WINDOW_SETTINGS.SCROLLED_RATING[0].delete('1.0', END)
+    rating = ''
+    users = []
+    for user in MAIN_WINDOW_SETTINGS.db_users.find_all():
+        users.append(user)
+
+    users.sort(key=lambda x: x['score'], reverse=True)
+    for user in users:
+        rating += 'Имя: ' + ' ' + user['name'] + '. Рейтинг: ' + str(user['score']) + '\n'
+
+    MAIN_WINDOW_SETTINGS.SCROLLED_RATING[0].insert(INSERT, rating)
+    MAIN_WINDOW_SETTINGS.SCROLLED_RATING[0].configure(state = 'disabled')
 
 def func_student():
     clearFrame()
@@ -118,7 +133,7 @@ def add_4quest():
         quest['question'] = MAIN_WINDOW_SETTINGS.INPUT_QUEST[0].get()
         quest['answer'] = [MAIN_WINDOW_SETTINGS.INPUT_ANS1[0].get(), MAIN_WINDOW_SETTINGS.INPUT_ANS2[0].get(),
                            MAIN_WINDOW_SETTINGS.INPUT_ANS3[0].get(), MAIN_WINDOW_SETTINGS.INPUT_ANS4[0].get()]
-        quest['correct'] = MAIN_WINDOW_SETTINGS.INPUT_CUR_ANS1[0].get()
+        quest['correct'] = int(MAIN_WINDOW_SETTINGS.INPUT_CUR_ANS1[0].get())
         MAIN_WINDOW_SETTINGS.db_questions.push(quest)
         MAIN_WINDOW_SETTINGS.INPUT_QUEST[0].delete(0, END)
         MAIN_WINDOW_SETTINGS.INPUT_ANS1[0].delete(0, END)
@@ -173,12 +188,18 @@ class MAIN_WINDOW_SETTINGS:
     TITLE = 'Приложение для проведения тестирования'
 
     ##### СТАРТОВОЕ СОСТОЯНИЕ ########
-    LABEL_START = [Label(MAIN_WINDOW, text='Выберите кто вы'), int(DEFAULT_WIDTH) // 2, 0]
+    LABEL_START = [Label(MAIN_WINDOW, text='Добро пожаловать в приложение для тестирования!!!'), int(DEFAULT_WIDTH) // 2, 0]
     BUTTON_START1 = [Button(MAIN_WINDOW, text='Ученик', command=func_student), int(DEFAULT_WIDTH) // 6 * 2, int(DEFAULT_HEIGHT) // 2]
     BUTTON_START2 = [Button(MAIN_WINDOW, text='Учитель', command=state_teacher_password), int(DEFAULT_WIDTH) // 6 * 4, int(DEFAULT_HEIGHT) // 2]
     BUTTON_RATING = [Button(MAIN_WINDOW, text='Рейтинг', command=state_rating), int(DEFAULT_WIDTH) // 2,
                      int(DEFAULT_HEIGHT) // 3 * 2]
     START_STATE = [LABEL_START, BUTTON_START1, BUTTON_START2, BUTTON_RATING]
+
+    #### РЕЙТИНГ ####
+    SCROLLED_RATING = [scrolledtext.ScrolledText(MAIN_WINDOW, width=200, height=50), 0, 0]
+    RETURN_RATING = [Button(MAIN_WINDOW, text='Вернуться', command=start_state),
+                      int(DEFAULT_WIDTH) // 10 * 9, int(DEFAULT_HEIGHT) // 10 * 9]
+    RATING_STATE = [SCROLLED_RATING, RETURN_RATING]
 
     ##### СОСТОЯНИЕ ВВОДА ИМЕНИ #####
     LABEL_INPUT_NAME = [Label(MAIN_WINDOW, text='Введите имя и фамилию через пробел:'), 0, 0]
@@ -222,7 +243,7 @@ class MAIN_WINDOW_SETTINGS:
     INPUT_ANS2 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 6]
     INPUT_ANS3 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 8]
     INPUT_ANS4 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 10]
-    INPUT_CUR_ANS1 = [Combobox(MAIN_WINDOW) , int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 12]
+    INPUT_CUR_ANS1 = [Combobox(MAIN_WINDOW, state="readonly") , int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 12]
     INPUT_CUR_ANS1[0]['values'] = (1, 2, 3, 4)
     INPUT_CUR_ANS1[0].current(0)
     BUTTON_ADD_4QUEST = [Button(MAIN_WINDOW, text='Добавить вопрос в базу', command=add_4quest), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 14]

@@ -30,7 +30,7 @@ class MongoDriver:
 
     def get_last_item(self, param='id'):
         self.__prepare()
-        return dict(list(self.collection.find().sort(param, -1).limit(1))[0])
+        return self.collection.count()
 
     def is_empty(self):
         self.__prepare()

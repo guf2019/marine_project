@@ -3,6 +3,7 @@ from tkinter.ttk import Combobox
 from tkinter import scrolledtext
 # from window_funcs import *
 from database.Mongodriver import MongoDriver
+from tkinter import messagebox
 import random
 
 
@@ -118,6 +119,7 @@ def add_4quest():
         MAIN_WINDOW_SETTINGS.INPUT_ANS2[0].delete(0, END)
         MAIN_WINDOW_SETTINGS.INPUT_ANS3[0].delete(0, END)
         MAIN_WINDOW_SETTINGS.INPUT_ANS4[0].delete(0, END)
+        messagebox.showinfo('Ошибка!', 'Вы не заполнили все поля')
     else:
         quest = {}
         quest['id'] = get_id_question()
@@ -132,6 +134,7 @@ def add_4quest():
         MAIN_WINDOW_SETTINGS.INPUT_ANS2[0].delete(0, END)
         MAIN_WINDOW_SETTINGS.INPUT_ANS3[0].delete(0, END)
         MAIN_WINDOW_SETTINGS.INPUT_ANS4[0].delete(0, END)
+        messagebox.showinfo('Отлично!', 'Вы добавили вопрос в базу')
         add_test()
 
 
@@ -145,6 +148,7 @@ def add_textquest():
     if (MAIN_WINDOW_SETTINGS.INPUT_QUEST0[0].get() == '' or MAIN_WINDOW_SETTINGS.INPUT_CUR_ANS2[0].get() == ''):
         MAIN_WINDOW_SETTINGS.INPUT_QUEST0[0].delete(0, END)
         MAIN_WINDOW_SETTINGS.INPUT_CUR_ANS2[0].delete(0, END)
+        messagebox.showinfo('Ошибка!', 'Вы не заполнили все поля')
     else:
         quest = {}
         quest['id'] = get_id_question()
@@ -154,6 +158,7 @@ def add_textquest():
         MAIN_WINDOW_SETTINGS.db_questions.push(quest)
         MAIN_WINDOW_SETTINGS.INPUT_QUEST0[0].delete(0, END)
         MAIN_WINDOW_SETTINGS.INPUT_CUR_ANS2[0].delete(0, END)
+        messagebox.showinfo('Отлично!', 'Вы добавили вопрос в базу')
         add_test()
 
 

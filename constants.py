@@ -20,6 +20,7 @@ def start_state():
     clearFrame()
     _expand_(MAIN_WINDOW_SETTINGS.START_STATE)
 
+
 def state_rating():
     clearFrame()
     _expand_(MAIN_WINDOW_SETTINGS.RATING_STATE)
@@ -36,6 +37,7 @@ def state_rating():
 
     MAIN_WINDOW_SETTINGS.SCROLLED_RATING[0].insert(INSERT, rating)
     MAIN_WINDOW_SETTINGS.SCROLLED_RATING[0].configure(state = 'disabled')
+
 
 def func_student():
     clearFrame()
@@ -62,6 +64,23 @@ def state_random_test():
         start_state()
 
 
+def state_write_random_test():
+    clearFrame()
+    _expand_(MAIN_WINDOW_SETTINGS.TEST2_STATE)
+    que = get_random_questions()
+
+    if que:
+        MAIN_WINDOW_SETTINGS.CURRENT_ANSWER = que['correct']
+        MAIN_WINDOW_SETTINGS.LABEL_RAND_QUEST[0].config(text=que['question'])
+    else:
+        start_state()
+
+
+def state_type_question():
+    clearFrame()
+    _expand_(MAIN_WINDOW_SETTINGS.CHOICE_STATE)
+
+
 def check_answer():
     if MAIN_WINDOW_SETTINGS.INPUT_CUR[0].get() == MAIN_WINDOW_SETTINGS.CURRENT_ANSWER:
         user = MAIN_WINDOW_SETTINGS.db_users.find_one('id', MAIN_WINDOW_SETTINGS.CURRENT_USER)
@@ -70,6 +89,16 @@ def check_answer():
         state_random_test()
     else:
         state_random_test()
+
+
+def check_2_answer():
+    if MAIN_WINDOW_SETTINGS.INPUT_ANS_QUE == MAIN_WINDOW_SETTINGS.CURRENT_ANSWER:
+        user = MAIN_WINDOW_SETTINGS.db_users.find_one('id', MAIN_WINDOW_SETTINGS.CURRENT_USER)
+        user['score'] += 1
+        MAIN_WINDOW_SETTINGS.db_users.update(user)
+        state_write_random_test()
+    else:
+        state_write_random_test()
 
 
 def get_random_questions():
@@ -88,13 +117,13 @@ def send_message():
     _id = MAIN_WINDOW_SETTINGS.db_users.find_one('name', text)['id']
     MAIN_WINDOW_SETTINGS.CURRENT_USER = _id
     MAIN_WINDOW_SETTINGS.INPUT_NAME[0].delete(0, END)
-    state_random_test()
+    state_type_question()
 
 
 def get_id():
     try:
-        id = MAIN_WINDOW_SETTINGS.db_users.get_last_item()['id'] + 1
-        return id
+        _id = MAIN_WINDOW_SETTINGS.db_users.get_last_item() + 1
+        return _id
     except Exception as e:
         return 0
 
@@ -226,7 +255,7 @@ class MAIN_WINDOW_SETTINGS:
                      int(DEFAULT_WIDTH) // 10 * 9, int(DEFAULT_HEIGHT) // 10 * 9]
     INPUT_STATE = [LABEL_INPUT_NAME, INPUT_NAME, RETURN_RAT, BUTTON_INPUT_NAME]
 
-    #### СОСТОЯНИЕ СЛУЧАЙНОГО ТЕСТА #####
+    #### СОСТОЯНИЕ СЛУЧАЙНОГО ТЕСТА С ОТВЕТАМИ#####
     LABEL_RANDOM_TEST = [Label(MAIN_WINDOW, text='Выберите 1 ответ на вопрос:'), 0, 0]
     LABEL_RANDOM_QUEST = [Label(MAIN_WINDOW, text='', ), 45, 70]
     BUTTON_INPUT_TEST_1 = [Label(MAIN_WINDOW, text='1',), 0, +110]
@@ -240,6 +269,21 @@ class MAIN_WINDOW_SETTINGS:
     RETURN_R = [Button(MAIN_WINDOW, text='Вернуться', command=state_input_student_name),int(DEFAULT_WIDTH) // 10 * 9, int(DEFAULT_HEIGHT) // 10 * 9]
     TEST_STATE = [LABEL_RANDOM_TEST, LABEL_RANDOM_QUEST, RETURN_R, BUTTON_CHECK, INPUT_CUR, BUTTON_INPUT_TEST_1, BUTTON_INPUT_TEST_2, BUTTON_INPUT_TEST_3,
                   BUTTON_INPUT_TEST_4]
+
+    #### СОСТОЯНИЕ ДЛЯ СЛУЧАЙНОГО ТЕСТА #####
+    LABEL_RAND_QUEST = [Label(MAIN_WINDOW, text='', ), 0, 0]
+    INPUT_ANS_QUE = [Entry(MAIN_WINDOW), 30, 30]
+    BUTTON_CHECK2 = [Button(MAIN_WINDOW, text='Проверить', command=check_2_answer), 0, 310]
+    RETURN_RR = [Button(MAIN_WINDOW, text='Вернуться', command=state_input_student_name), int(DEFAULT_WIDTH) // 10 * 9,
+                int(DEFAULT_HEIGHT) // 10 * 9]
+    TEST2_STATE = [LABEL_RAND_QUEST, INPUT_ANS_QUE, RETURN_RR, BUTTON_CHECK2]
+
+    ###### СОСТОЯНИЕ ВЫБОРА ТИПА ТЕСТА ####
+    BUTTON_RESPONSE = [Button(MAIN_WINDOW, text='С ответами', command=state_random_test), 0, +150]
+    BUTTON_NO_RESPONSE = [Button(MAIN_WINDOW, text='Без ответов', command=state_write_random_test), 400, +150]
+    RETURN_RRR = [Button(MAIN_WINDOW, text='Вернуться', command=state_input_student_name), int(DEFAULT_WIDTH) // 10 * 9,
+                int(DEFAULT_HEIGHT) // 10 * 9]
+    CHOICE_STATE = [BUTTON_RESPONSE, BUTTON_NO_RESPONSE, RETURN_RRR]
 
     ##### СОСТОЯНИЕ УЧИТЕЛЯ PASSWORD########
     INPUT_TEACHER_PASSWORD = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, 0]
@@ -268,7 +312,7 @@ class MAIN_WINDOW_SETTINGS:
     INPUT_ANS2 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 6]
     INPUT_ANS3 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 8]
     INPUT_ANS4 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 10]
-    INPUT_CUR_ANS1 = [Combobox(MAIN_WINDOW, state="readonly") , int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 12]
+    INPUT_CUR_ANS1 = [Combobox(MAIN_WINDOW, state="readonly"), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 12]
     INPUT_CUR_ANS1[0]['values'] = (1, 2, 3, 4)
     INPUT_CUR_ANS1[0].current(0)
     BUTTON_ADD_4QUEST = [Button(MAIN_WINDOW, text='Добавить вопрос в базу', command=add_4quest), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 14]
@@ -286,7 +330,6 @@ class MAIN_WINDOW_SETTINGS:
     RETURN_QUEST2 = [Button(MAIN_WINDOW, text='Вернуться', command=add_test),
                          int(DEFAULT_WIDTH) // 10 * 9, int(DEFAULT_HEIGHT) // 10 * 9]
     ADD_QUEST2_STATE = [LABEL_QUEST0, INPUT_QUEST0, INPUT_CUR_ANS2, BUTTON_ADD_TEXTQUEST, RETURN_QUEST2]
-
 
 
     db_users = MongoDriver('app_testing', 'users')

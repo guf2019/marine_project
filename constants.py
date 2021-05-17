@@ -27,16 +27,23 @@ def state_input_student_name():
     _expand_(MAIN_WINDOW_SETTINGS.INPUT_STATE)
 
 
+def state_random_test():
+    clearFrame()
+    _expand_(MAIN_WINDOW_SETTINGS.TEST_STATE)
+
+
 def send_message():
-    text = MAIN_WINDOW_SETTINGS.INPUT_NAME.get()
+    text = MAIN_WINDOW_SETTINGS.INPUT_NAME[0].get()
     _id = get_id()
-    MAIN_WINDOW_SETTINGS.db_users.push({'id': _id, 'name': text, 'score': 0, })
+    MAIN_WINDOW_SETTINGS.db_users.push({'id': _id, 'name': text, 'score': 0})
+    state_random_test()
 
 
 def get_id():
     try:
-        return MAIN_WINDOW_SETTINGS.db_users.get_last_item() + 1
-    except:
+        id = MAIN_WINDOW_SETTINGS.db_users.get_last_item()['id'] + 1
+        return id
+    except Exception as e:
         return 0
 
 
@@ -112,13 +119,19 @@ class MAIN_WINDOW_SETTINGS:
     BUTTON_START2 = [Button(MAIN_WINDOW, text='Учитель', command=func_teacher), int(DEFAULT_WIDTH) // 6 * 4, int(DEFAULT_HEIGHT) // 2]
     START_STATE = [LABEL_START, BUTTON_START1, BUTTON_START2]
 
-
-    LABEL_INPUT_NAME = [Label(MAIN_WINDOW, text='Введите имя и фамилию через запятую:'), int(DEFAULT_WIDTH) // 2, 0]
-    INPUT_NAME = [Entry(MAIN_WINDOW), 0, 0]
-    BUTTON_INPUT_NAME = [Button(MAIN_WINDOW, text='Oтправить', command=send_message), int(DEFAULT_WIDTH) // 6 * 2, int(DEFAULT_HEIGHT) // 2]
-
+    ##### СОСТОЯНИЕ ВВОДА ИМЕНИ #####
+    LABEL_INPUT_NAME = [Label(MAIN_WINDOW, text='Введите имя и фамилию через запятую:'), 0, 0]
+    INPUT_NAME = [Entry(MAIN_WINDOW), 0, +30]
+    BUTTON_INPUT_NAME = [Button(MAIN_WINDOW, text='Oтправить', command=send_message), 0, +70]
     INPUT_STATE = [LABEL_INPUT_NAME, INPUT_NAME, BUTTON_INPUT_NAME]
 
+    #### СОСТОЯНИЕ СЛУЧАЙНОГО ТЕСТА #####
+    LABEL_RANDOM_TEST = [Label(MAIN_WINDOW, text='Выберите 1 ответ на вопрос:'), 0, 0]
+    BUTTON_INPUT_TEST_1 = [Button(MAIN_WINDOW, text='1', command=send_message), 70, +70]
+    BUTTON_INPUT_TEST_2 = [Button(MAIN_WINDOW, text='2', command=send_message), 0, +140]
+    BUTTON_INPUT_TEST_3 = [Button(MAIN_WINDOW, text='3', command=send_message), 0, +70]
+    BUTTON_INPUT_TEST_4 = [Button(MAIN_WINDOW, text='4', command=send_message), +70, +140]
+    TEST_STATE = [LABEL_RANDOM_TEST, BUTTON_INPUT_TEST_1, BUTTON_INPUT_TEST_2, BUTTON_INPUT_TEST_3, BUTTON_INPUT_TEST_4]
     ##### СОСТОЯНИЕ УЧИТЕЛЯ PASSWORD########
     INPUT_TEACHER_PASSWORD = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, 0]
     PASSWORD = '123'

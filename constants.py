@@ -34,13 +34,21 @@ def state_input_student_name():
 def state_random_test():
     clearFrame()
     _expand_(MAIN_WINDOW_SETTINGS.TEST_STATE)
-    get_random_questions()
+    que = get_random_questions()
+    MAIN_WINDOW_SETTINGS.LABEL_RANDOM_QUEST[0].config(text=que['question'])
+    MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_1[0].config(text=que['answer'][0])
+    MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_2[0].config(text=que['answer'][1])
+    MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_3[0].config(text=que['answer'][2])
+    MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_4[0].config(text=que['answer'][3])
 
+
+def check_answer():
+    pass
 
 def get_random_questions():
     try:
         questions = list(MAIN_WINDOW_SETTINGS.db_questions.find_all())
-        return questions[random.randint(0, len(questions))]
+        return questions[random.randint(0, len(questions)-1)]
     except Exception as e:
         return 0
 
@@ -180,11 +188,12 @@ class MAIN_WINDOW_SETTINGS:
 
     #### СОСТОЯНИЕ СЛУЧАЙНОГО ТЕСТА #####
     LABEL_RANDOM_TEST = [Label(MAIN_WINDOW, text='Выберите 1 ответ на вопрос:'), 0, 0]
-    BUTTON_INPUT_TEST_1 = [Button(MAIN_WINDOW, text='1', command=send_message), 70, +70]
-    BUTTON_INPUT_TEST_2 = [Button(MAIN_WINDOW, text='2', command=send_message), 0, +140]
-    BUTTON_INPUT_TEST_3 = [Button(MAIN_WINDOW, text='3', command=send_message), 0, +70]
-    BUTTON_INPUT_TEST_4 = [Button(MAIN_WINDOW, text='4', command=send_message), +70, +140]
-    TEST_STATE = [LABEL_RANDOM_TEST, BUTTON_INPUT_TEST_1, BUTTON_INPUT_TEST_2, BUTTON_INPUT_TEST_3, BUTTON_INPUT_TEST_4]
+    LABEL_RANDOM_QUEST = [Label(MAIN_WINDOW, text='', ), 45, 70]
+    BUTTON_INPUT_TEST_1 = [Checkbutton(MAIN_WINDOW, text='1', command=check_answer), 140, +140]
+    BUTTON_INPUT_TEST_2 = [Checkbutton(MAIN_WINDOW, text='2', command=check_answer), 0, +280]
+    BUTTON_INPUT_TEST_3 = [Checkbutton(MAIN_WINDOW, text='3', command=check_answer), 0, +140]
+    BUTTON_INPUT_TEST_4 = [Checkbutton(MAIN_WINDOW, text='4', command=check_answer), 140, +280]
+    TEST_STATE = [LABEL_RANDOM_TEST, LABEL_RANDOM_QUEST, BUTTON_INPUT_TEST_1, BUTTON_INPUT_TEST_2, BUTTON_INPUT_TEST_3, BUTTON_INPUT_TEST_4]
 
     ##### СОСТОЯНИЕ УЧИТЕЛЯ PASSWORD########
     INPUT_TEACHER_PASSWORD = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, 0]

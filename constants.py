@@ -2,11 +2,13 @@ from tkinter import *
 # from window_funcs import *
 
 def start_state():
+    MAIN_WINDOW_SETTINGS.RETURN_BUTTON.place_forget()
     MAIN_WINDOW_SETTINGS.LABEL_START.place(x=MAIN_WINDOW_SETTINGS.LABEL_START_X, y=MAIN_WINDOW_SETTINGS.LABEL_START_Y)
     MAIN_WINDOW_SETTINGS.BUTTON_START1.place(x=MAIN_WINDOW_SETTINGS.BUTTON_START1_X,
                                              y=MAIN_WINDOW_SETTINGS.BUTTON_START1_Y)
     MAIN_WINDOW_SETTINGS.BUTTON_START2.place(x=MAIN_WINDOW_SETTINGS.BUTTON_START2_X,
                                              y=MAIN_WINDOW_SETTINGS.BUTTON_START2_Y)
+    MAIN_WINDOW_SETTINGS.LAST_STATE = start_state
 
 def func_student():
     MAIN_WINDOW_SETTINGS.LABEL_START.place_forget()
@@ -20,16 +22,25 @@ def func_teacher():
     state_teacher_password()
 
 def state_teacher_password():
+    MAIN_WINDOW_SETTINGS.RETURN_BUTTON.place_forget()
     MAIN_WINDOW_SETTINGS.INPUT_TEACHER_PASSWORD.place(x=MAIN_WINDOW_SETTINGS.INPUT_TEACHER_PASSWORD_X, y=MAIN_WINDOW_SETTINGS.INPUT_TEACHER_PASSWORD_Y)
     MAIN_WINDOW_SETTINGS.TEACHER_PASSWORD_BUTTON.place(x=MAIN_WINDOW_SETTINGS.TEACHER_PASSWORD_BUTTON_X, y=MAIN_WINDOW_SETTINGS.TEACHER_PASSWORD_BUTTON_Y)
+    MAIN_WINDOW_SETTINGS.LAST_STATE = start_state
 
 def auth_teacher():
+    MAIN_WINDOW_SETTINGS.RETURN_BUTTON.place_forget()
     if MAIN_WINDOW_SETTINGS.PASSWORD == MAIN_WINDOW_SETTINGS.INPUT_TEACHER_PASSWORD.get():
         MAIN_WINDOW_SETTINGS.INPUT_TEACHER_PASSWORD.place_forget()
         MAIN_WINDOW_SETTINGS.TEACHER_PASSWORD_BUTTON.place_forget()
+        MAIN_WINDOW_SETTINGS.LAST_STATE = auth_teacher
+        MAIN_WINDOW_SETTINGS.INPUT_TEACHER_PASSWORD.delete(0, END)
+        add_test()
     else:
         MAIN_WINDOW_SETTINGS.INPUT_TEACHER_PASSWORD.delete(0, END)
 
+def add_test():
+
+    MAIN_WINDOW_SETTINGS.RETURN_BUTTON.place(x=MAIN_WINDOW_SETTINGS.RETURN_BUTTON_X, y=MAIN_WINDOW_SETTINGS.RETURN_BUTTON_Y)
 
 class MAIN_WINDOW_SETTINGS:
     MAIN_WINDOW = Tk()
@@ -38,6 +49,7 @@ class MAIN_WINDOW_SETTINGS:
     HEIGHT = '800'
     WIDTH = '1000'
     TITLE = 'Приложение для проведения тестирования'
+    LAST_STATE = start_state
 
     ##### СТАРТОВОЕ СОСТОЯНИЕ ########
     LABEL_START = Label(MAIN_WINDOW, text='Выберите кто вы')
@@ -58,10 +70,20 @@ class MAIN_WINDOW_SETTINGS:
     INPUT_TEACHER_PASSWORD = Entry(MAIN_WINDOW)
     INPUT_TEACHER_PASSWORD_X = int(DEFAULT_WIDTH) // 2
     INPUT_TEACHER_PASSWORD_Y = 0
+
     PASSWORD = '123'
+
     TEACHER_PASSWORD_BUTTON = Button(MAIN_WINDOW, text='Войти', command=auth_teacher)
     TEACHER_PASSWORD_BUTTON_X = int(DEFAULT_WIDTH) // 2
     TEACHER_PASSWORD_BUTTON_Y = int(DEFAULT_HEIGHT) // 2
+
+    ########### СОСТОЯНИЕ ДОБАВИТЬ ТЕСТ - ВЕРНУТЬСЯ #####
+
+    RETURN_BUTTON = Button(MAIN_WINDOW, text='Вернуться', command=LAST_STATE)
+    RETURN_BUTTON_X = 0
+    RETURN_BUTTON_Y = int(DEFAULT_HEIGHT) // 2
+
+
 
 
 

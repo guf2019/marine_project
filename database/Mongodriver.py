@@ -67,6 +67,14 @@ class MongoDriver:
         except Exception as e:
             print(e)
 
+    def update(self, item=None):
+        try:
+            self.__prepare()
+            item_id = item['id']
+            self.collection.update_one({'id': item_id}, {'$set': item}, upsert=True)
+        except Exception as e:
+            print(e)
+
     def find_all(self):
         self.__prepare()
         current_pos = 0
@@ -79,6 +87,10 @@ class MongoDriver:
                 break
             except:
                 self.__prepare()
+
+    def find_one(self, key, value):
+        self.__prepare()
+        return self.collection.find_one({key: value})
 
     def is_in(self, index=None, value=None):
         self.__prepare()

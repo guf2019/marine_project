@@ -3,10 +3,14 @@ from tkinter import *
 from database.Mongodriver import MongoDriver
 
 
+def _expand_(data):
+    for widget in data:
+        widget[0].place(x=widget[1], y=widget[2])
+
+
 def clearFrame():
     for widget in MAIN_WINDOW_SETTINGS.MAIN_WINDOW.winfo_children():
        widget.place_forget()
-
 
 
 def start_state():
@@ -14,19 +18,13 @@ def start_state():
         widget[0].place(x=widget[1], y=widget[2])
 
 
-
 def func_student():
-    MAIN_WINDOW_SETTINGS.LABEL_START.place_forget()
-    MAIN_WINDOW_SETTINGS.BUTTON_START1.place_forget()
-    MAIN_WINDOW_SETTINGS.BUTTON_START2.place_forget()
+    clearFrame()
     state_input_student_name()
 
 
 def state_input_student_name():
-    MAIN_WINDOW_SETTINGS.RETURN_BUTTON.place_forget()
-    MAIN_WINDOW_SETTINGS.LABEL_INPUT_NAME.place(x=MAIN_WINDOW_SETTINGS.LABEL_INPUT_NAME_X-150, y=MAIN_WINDOW_SETTINGS.LABEL_INPUT_NAME_Y+300)
-    MAIN_WINDOW_SETTINGS.INPUT_NAME.place(x=MAIN_WINDOW_SETTINGS.BUTTON_INPUT_NAME_X, y=MAIN_WINDOW_SETTINGS.BUTTON_INPUT_NAME_X)
-    MAIN_WINDOW_SETTINGS.BUTTON_INPUT_NAME.place(x=MAIN_WINDOW_SETTINGS.BUTTON_INPUT_NAME_X, y=MAIN_WINDOW_SETTINGS.BUTTON_INPUT_NAME_Y)
+    _expand_(MAIN_WINDOW_SETTINGS.INPUT_STATE)
 
 
 def send_message():
@@ -40,6 +38,7 @@ def get_id():
         return MAIN_WINDOW_SETTINGS.db_users.get_last_item() + 1
     except:
         return 0
+
 
 def func_teacher():
     clearFrame()
@@ -119,13 +118,11 @@ class MAIN_WINDOW_SETTINGS:
     START_STATE = [LABEL_START, BUTTON_START1, BUTTON_START2]
 
 
-    LABEL_INPUT_NAME = Label(MAIN_WINDOW, text='Введите имя и фамилию через запятую:')
-    INPUT_NAME = Entry(MAIN_WINDOW)
-    BUTTON_INPUT_NAME = Button(MAIN_WINDOW, text='Oтправить', command=send_message)
-    BUTTON_INPUT_NAME_X = int(DEFAULT_WIDTH) // 6 * 2
-    BUTTON_INPUT_NAME_Y = int(DEFAULT_HEIGHT) // 2
-    LABEL_INPUT_NAME_X = int(DEFAULT_WIDTH) // 2
-    LABEL_INPUT_NAME_Y = 0
+    LABEL_INPUT_NAME = [Label(MAIN_WINDOW, text='Введите имя и фамилию через запятую:'), int(DEFAULT_WIDTH) // 2, 0]
+    INPUT_NAME = [Entry(MAIN_WINDOW), 0, 0]
+    BUTTON_INPUT_NAME = [Button(MAIN_WINDOW, text='Oтправить', command=send_message), int(DEFAULT_WIDTH) // 6 * 2, int(DEFAULT_HEIGHT) // 2]
+
+    INPUT_STATE = [LABEL_INPUT_NAME, INPUT_NAME, BUTTON_INPUT_NAME]
 
     ##### СОСТОЯНИЕ УЧИТЕЛЯ PASSWORD########
     INPUT_TEACHER_PASSWORD = Entry(MAIN_WINDOW)
@@ -184,8 +181,6 @@ class MAIN_WINDOW_SETTINGS:
 
 
     ############# ДОБАВЛЕНИЕ ВОПРОСА НА ТЕКСТОВЫЙ ОТВЕТ ##############
-
-
 
 
 

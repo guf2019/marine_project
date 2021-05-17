@@ -43,6 +43,7 @@ def func_student():
 
 
 def state_input_student_name():
+    clearFrame()
     _expand_(MAIN_WINDOW_SETTINGS.INPUT_STATE)
 
 
@@ -221,7 +222,9 @@ class MAIN_WINDOW_SETTINGS:
     LABEL_INPUT_NAME = [Label(MAIN_WINDOW, text='Введите имя и фамилию через пробел:'), 0, 0]
     INPUT_NAME = [Entry(MAIN_WINDOW), 0, +30]
     BUTTON_INPUT_NAME = [Button(MAIN_WINDOW, text='Oтправить', command=send_message), 0, +70]
-    INPUT_STATE = [LABEL_INPUT_NAME, INPUT_NAME, BUTTON_INPUT_NAME]
+    RETURN_RAT = [Button(MAIN_WINDOW, text='Вернуться', command=start_state),
+                     int(DEFAULT_WIDTH) // 10 * 9, int(DEFAULT_HEIGHT) // 10 * 9]
+    INPUT_STATE = [LABEL_INPUT_NAME, INPUT_NAME, RETURN_RAT, BUTTON_INPUT_NAME]
 
     #### СОСТОЯНИЕ СЛУЧАЙНОГО ТЕСТА #####
     LABEL_RANDOM_TEST = [Label(MAIN_WINDOW, text='Выберите 1 ответ на вопрос:'), 0, 0]
@@ -234,7 +237,8 @@ class MAIN_WINDOW_SETTINGS:
     INPUT_CUR = [Combobox(MAIN_WINDOW, state="readonly"), 0, 270]
     INPUT_CUR[0]['values'] = (1, 2, 3, 4)
     INPUT_CUR[0].current(0)
-    TEST_STATE = [LABEL_RANDOM_TEST, LABEL_RANDOM_QUEST, BUTTON_CHECK, INPUT_CUR, BUTTON_INPUT_TEST_1, BUTTON_INPUT_TEST_2, BUTTON_INPUT_TEST_3,
+    RETURN_R = [Button(MAIN_WINDOW, text='Вернуться', command=state_input_student_name),int(DEFAULT_WIDTH) // 10 * 9, int(DEFAULT_HEIGHT) // 10 * 9]
+    TEST_STATE = [LABEL_RANDOM_TEST, LABEL_RANDOM_QUEST, RETURN_R, BUTTON_CHECK, INPUT_CUR, BUTTON_INPUT_TEST_1, BUTTON_INPUT_TEST_2, BUTTON_INPUT_TEST_3,
                   BUTTON_INPUT_TEST_4]
 
     ##### СОСТОЯНИЕ УЧИТЕЛЯ PASSWORD########

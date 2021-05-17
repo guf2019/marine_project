@@ -268,29 +268,38 @@ class MAIN_WINDOW_SETTINGS:
 
     ############# ДОБАВЛЕНИЕ ВОПРОСА НА 4 ВАРИАНТА ОТВЕТА ##############
     LABEL_QUEST = [Label(MAIN_WINDOW, text='Введите вопрос и 4 варианта ответа:'), int(DEFAULT_WIDTH) // 2, 0]
+    LABEL_Q = [Label(MAIN_WINDOW, text='Вопрос: '), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 2 - 20]
     INPUT_QUEST = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 2]
+    LABEL_A1 = [Label(MAIN_WINDOW, text='Ответ 1: '), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 4 - 20]
     INPUT_ANS1 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 4]
+    LABEL_A2 = [Label(MAIN_WINDOW, text='Ответ 2: '), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 6 - 20]
     INPUT_ANS2 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 6]
+    LABEL_A3 = [Label(MAIN_WINDOW, text='Ответ 3: '), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 8 - 20]
     INPUT_ANS3 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 8]
+    LABEL_A4 = [Label(MAIN_WINDOW, text='Ответ 4: '), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 10 - 20]
     INPUT_ANS4 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 10]
+    LABEL_CA = [Label(MAIN_WINDOW, text='Правильный ответ: '), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 12 - 20]
     INPUT_CUR_ANS1 = [Combobox(MAIN_WINDOW, state="readonly") , int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 12]
     INPUT_CUR_ANS1[0]['values'] = (1, 2, 3, 4)
     INPUT_CUR_ANS1[0].current(0)
     BUTTON_ADD_4QUEST = [Button(MAIN_WINDOW, text='Добавить вопрос в базу', command=add_4quest), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 14]
     RETURN_QUEST1 = [Button(MAIN_WINDOW, text='Вернуться', command=add_test),
                      int(DEFAULT_WIDTH) // 10 * 9, int(DEFAULT_HEIGHT) // 10 * 9]
-    ADD_QUEST1_STATE = [LABEL_QUEST, INPUT_QUEST, INPUT_ANS1, INPUT_ANS2, INPUT_ANS3, INPUT_ANS4, INPUT_CUR_ANS1, BUTTON_ADD_4QUEST, RETURN_QUEST1]
+    ADD_QUEST1_STATE = [LABEL_QUEST, INPUT_QUEST, INPUT_ANS1, INPUT_ANS2, INPUT_ANS3, INPUT_ANS4, INPUT_CUR_ANS1,
+                        BUTTON_ADD_4QUEST, RETURN_QUEST1, LABEL_Q, LABEL_A1, LABEL_A2, LABEL_A3, LABEL_A4, LABEL_CA]
 
 
     ############# ДОБАВЛЕНИЕ ВОПРОСА НА ТЕКСТОВЫЙ ОТВЕТ ##############
     LABEL_QUEST0 = [Label(MAIN_WINDOW, text='Введите вопрос и правильный текстовый ответ:'), int(DEFAULT_WIDTH) // 2, 0]
+    LABEL_Q2 = [Label(MAIN_WINDOW, text='Вопрос: '), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 2 - 20]
     INPUT_QUEST0 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 2]
-    INPUT_CUR_ANS2 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 6]
+    LABEL_A0 = [Label(MAIN_WINDOW, text='Ответ : '), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 4 - 20]
+    INPUT_CUR_ANS2 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 4]
     BUTTON_ADD_TEXTQUEST = [Button(MAIN_WINDOW, text='Добавить вопрос в базу', command=add_textquest),
                          int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 8]
     RETURN_QUEST2 = [Button(MAIN_WINDOW, text='Вернуться', command=add_test),
                          int(DEFAULT_WIDTH) // 10 * 9, int(DEFAULT_HEIGHT) // 10 * 9]
-    ADD_QUEST2_STATE = [LABEL_QUEST0, INPUT_QUEST0, INPUT_CUR_ANS2, BUTTON_ADD_TEXTQUEST, RETURN_QUEST2]
+    ADD_QUEST2_STATE = [LABEL_QUEST0, INPUT_QUEST0, INPUT_CUR_ANS2, BUTTON_ADD_TEXTQUEST, RETURN_QUEST2, LABEL_Q2, LABEL_A0]
 
 
 

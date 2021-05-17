@@ -1,10 +1,16 @@
 from tkinter import *
 # from window_funcs import *
+from database.Mongodriver import MongoDriver
+
+
+def _expand_(data):
+    for widget in data:
+        widget[0].place(x=widget[1], y=widget[2])
+
 
 def clearFrame():
     for widget in MAIN_WINDOW_SETTINGS.MAIN_WINDOW.winfo_children():
        widget.place_forget()
-
 
 
 def start_state():
@@ -14,10 +20,30 @@ def start_state():
 
 def func_student():
     clearFrame()
+    state_input_student_name()
+
+
+def state_input_student_name():
+    _expand_(MAIN_WINDOW_SETTINGS.INPUT_STATE)
+
+
+def send_message():
+    text = MAIN_WINDOW_SETTINGS.INPUT_NAME.get()
+    _id = get_id()
+    MAIN_WINDOW_SETTINGS.db_users.push({'id': _id, 'name': text, 'score': 0, })
+
+
+def get_id():
+    try:
+        return MAIN_WINDOW_SETTINGS.db_users.get_last_item() + 1
+    except:
+        return 0
+
 
 def func_teacher():
     clearFrame()
     state_teacher_password()
+
 
 def state_teacher_password():
     # MAIN_WINDOW_SETTINGS.INPUT_TEACHER_PASSWORD.place(x=MAIN_WINDOW_SETTINGS.INPUT_TEACHER_PASSWORD_X, y=MAIN_WINDOW_SETTINGS.INPUT_TEACHER_PASSWORD_Y)
@@ -25,12 +51,14 @@ def state_teacher_password():
     for widget in MAIN_WINDOW_SETTINGS.TEACHER_PASSWORD_STATE:
         widget[0].place(x=widget[1], y=widget[2])
 
+
 def auth_teacher():
     if MAIN_WINDOW_SETTINGS.PASSWORD == MAIN_WINDOW_SETTINGS.INPUT_TEACHER_PASSWORD[0].get():
         MAIN_WINDOW_SETTINGS.INPUT_TEACHER_PASSWORD[0].delete(0, END)
         add_test()
     else:
         MAIN_WINDOW_SETTINGS.INPUT_TEACHER_PASSWORD[0].delete(0, END)
+
 
 def add_test():
     clearFrame()
@@ -69,6 +97,7 @@ def add_textquest():
 
 
 
+
 class MAIN_WINDOW_SETTINGS:
     MAIN_WINDOW = Tk()
     DEFAULT_HEIGHT = str(MAIN_WINDOW.winfo_screenheight())
@@ -82,6 +111,13 @@ class MAIN_WINDOW_SETTINGS:
     BUTTON_START1 = [Button(MAIN_WINDOW, text='Ученик', command=func_student), int(DEFAULT_WIDTH) // 6 * 2, int(DEFAULT_HEIGHT) // 2]
     BUTTON_START2 = [Button(MAIN_WINDOW, text='Учитель', command=func_teacher), int(DEFAULT_WIDTH) // 6 * 4, int(DEFAULT_HEIGHT) // 2]
     START_STATE = [LABEL_START, BUTTON_START1, BUTTON_START2]
+
+
+    LABEL_INPUT_NAME = [Label(MAIN_WINDOW, text='Введите имя и фамилию через запятую:'), int(DEFAULT_WIDTH) // 2, 0]
+    INPUT_NAME = [Entry(MAIN_WINDOW), 0, 0]
+    BUTTON_INPUT_NAME = [Button(MAIN_WINDOW, text='Oтправить', command=send_message), int(DEFAULT_WIDTH) // 6 * 2, int(DEFAULT_HEIGHT) // 2]
+
+    INPUT_STATE = [LABEL_INPUT_NAME, INPUT_NAME, BUTTON_INPUT_NAME]
 
     ##### СОСТОЯНИЕ УЧИТЕЛЯ PASSWORD########
     INPUT_TEACHER_PASSWORD = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, 0]
@@ -120,7 +156,7 @@ class MAIN_WINDOW_SETTINGS:
 
 
 
-
+    db_users = MongoDriver('app_testing', 'users')
 
 
 

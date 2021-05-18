@@ -54,35 +54,31 @@ def state_random_test():
     clearFrame()
     _expand_(MAIN_WINDOW_SETTINGS.TEST_STATE)
     que = get_random_questions()
-    if que:
-        MAIN_WINDOW_SETTINGS.CURRENT_ANSWER = que['correct']
-        MAIN_WINDOW_SETTINGS.QUESTIONS_COST = que['cost']
-        MAIN_WINDOW_SETTINGS.LABEL_RANDOM_QUEST[0].config(text=que['question'])
-        MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_1[0].config(text='1.' + que['answer'][0])
-        MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_2[0].config(text='2.' + que['answer'][1])
-        MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_3[0].config(text='3.' + que['answer'][2])
-        MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_4[0].config(text='4.' + que['answer'][3])
-
-    else:
+    if not que:
         start_state()
+    elif que['level'] == 1:
+        clearFrame()
+        _expand_(MAIN_WINDOW_SETTINGS.TEST_STATE)
+        stat1(que)
+    elif que['level'] == 2:
+        clearFrame()
+        _expand_(MAIN_WINDOW_SETTINGS.TEST_STATE2)
+        stat2(que)
 
 
-def state_write_random_test():
-    clearFrame()
-    _expand_(MAIN_WINDOW_SETTINGS.TEST2_STATE)
-    que = get_random_questions()
+def stat1(que):
+    MAIN_WINDOW_SETTINGS.CURRENT_ANSWER = que['correct']
+    MAIN_WINDOW_SETTINGS.QUESTIONS_COST = que['cost']
+    MAIN_WINDOW_SETTINGS.LABEL_RANDOM_QUEST[0].config(text=que['question'])
+    MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_1[0].config(text='1.' + que['answer'][0])
+    MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_2[0].config(text='2.' + que['answer'][1])
+    MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_3[0].config(text='3.' + que['answer'][2])
+    MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_4[0].config(text='4.' + que['answer'][3])
 
-    if que:
-        MAIN_WINDOW_SETTINGS.CURRENT_ANSWER = que['correct']
-        MAIN_WINDOW_SETTINGS.QUESTIONS_COST = que['cost']
-        MAIN_WINDOW_SETTINGS.LABEL_RAND_QUEST[0].config(text=que['question'])
-    else:
-        start_state()
-
-
-def state_type_question():
-    clearFrame()
-    _expand_(MAIN_WINDOW_SETTINGS.CHOICE_STATE)
+def stat2(que):
+    MAIN_WINDOW_SETTINGS.CURRENT_ANSWER = que['correct']
+    MAIN_WINDOW_SETTINGS.QUESTIONS_COST = que['cost']
+    MAIN_WINDOW_SETTINGS.LABEL_RAND_QUEST[0].config(text=que['question'])
 
 
 def check_answer():
@@ -103,10 +99,10 @@ def check_2_answer():
         user['score'] += MAIN_WINDOW_SETTINGS.QUESTIONS_COST
         MAIN_WINDOW_SETTINGS.db_users.update(user)
         messagebox.showinfo('Поздравляем', 'Вы правильно ответили на вопрос')
-        state_write_random_test()
+        state_random_test()
     else:
         messagebox.showinfo('Как печально', 'Вы неправильно ответили на вопрос(')
-        state_write_random_test()
+        state_random_test()
 
 
 def get_random_questions():
@@ -125,7 +121,7 @@ def send_message():
     _id = MAIN_WINDOW_SETTINGS.db_users.find_one('name', text)['id']
     MAIN_WINDOW_SETTINGS.CURRENT_USER = _id
     MAIN_WINDOW_SETTINGS.INPUT_NAME[0].delete(0, END)
-    state_type_question()
+    state_random_test()
 
 
 def get_id():
@@ -259,6 +255,9 @@ class MAIN_WINDOW_SETTINGS:
     BUTTON_INPUT_TEST_3 = [Label(MAIN_WINDOW, text='3',), 0, +190]
     BUTTON_INPUT_TEST_4 = [Label(MAIN_WINDOW, text='4',), 0, +230]
     BUTTON_CHECK = [Button(MAIN_WINDOW, text='Проверить', command=check_answer), 0, 310]
+    LABEL_RAND_QUEST = [Label(MAIN_WINDOW, text='', ), 0, 0]
+    INPUT_ANS_QUE = [Entry(MAIN_WINDOW), 30, 30]
+    BUTTON_CHECK2 = [Button(MAIN_WINDOW, text='Проверить', command=check_2_answer), 0, 310]
     INPUT_CUR = [Combobox(MAIN_WINDOW, state="readonly"), 0, 270]
     INPUT_CUR[0]['values'] = (1, 2, 3, 4)
     INPUT_CUR[0].current(0)
@@ -266,20 +265,7 @@ class MAIN_WINDOW_SETTINGS:
     TEST_STATE = [LABEL_RANDOM_TEST, LABEL_RANDOM_QUEST, RETURN_R, BUTTON_CHECK, INPUT_CUR, BUTTON_INPUT_TEST_1, BUTTON_INPUT_TEST_2, BUTTON_INPUT_TEST_3,
                   BUTTON_INPUT_TEST_4]
 
-    #### СОСТОЯНИЕ ДЛЯ СЛУЧАЙНОГО ТЕСТА #####
-    LABEL_RAND_QUEST = [Label(MAIN_WINDOW, text='', ), 0, 0]
-    INPUT_ANS_QUE = [Entry(MAIN_WINDOW), 30, 30]
-    BUTTON_CHECK2 = [Button(MAIN_WINDOW, text='Проверить', command=check_2_answer), 0, 310]
-    RETURN_RR = [Button(MAIN_WINDOW, text='Вернуться', command=state_input_student_name), int(DEFAULT_WIDTH) // 10 * 9,
-                int(DEFAULT_HEIGHT) // 10 * 9]
-    TEST2_STATE = [LABEL_RAND_QUEST, INPUT_ANS_QUE, RETURN_RR, BUTTON_CHECK2]
-
-    ###### СОСТОЯНИЕ ВЫБОРА ТИПА ТЕСТА ####
-    BUTTON_RESPONSE = [Button(MAIN_WINDOW, text='С ответами', command=state_random_test), 0, +150]
-    BUTTON_NO_RESPONSE = [Button(MAIN_WINDOW, text='Без ответов', command=state_write_random_test), 400, +150]
-    RETURN_RRR = [Button(MAIN_WINDOW, text='Вернуться', command=state_input_student_name), int(DEFAULT_WIDTH) // 10 * 9,
-                int(DEFAULT_HEIGHT) // 10 * 9]
-    CHOICE_STATE = [BUTTON_RESPONSE, BUTTON_NO_RESPONSE, RETURN_RRR]
+    TEST_STATE2 = [LABEL_RAND_QUEST, INPUT_ANS_QUE, BUTTON_CHECK2, RETURN_R]
 
     ##### СОСТОЯНИЕ УЧИТЕЛЯ PASSWORD########
     INPUT_TEACHER_PASSWORD = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, 0]

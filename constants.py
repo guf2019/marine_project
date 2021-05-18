@@ -94,7 +94,7 @@ def check_answer():
 
 
 def check_2_answer():
-    if MAIN_WINDOW_SETTINGS.INPUT_ANS_QUE == MAIN_WINDOW_SETTINGS.CURRENT_ANSWER:
+    if MAIN_WINDOW_SETTINGS.INPUT_ANS_QUE[0].get() == MAIN_WINDOW_SETTINGS.CURRENT_ANSWER:
         user = MAIN_WINDOW_SETTINGS.db_users.find_one('id', MAIN_WINDOW_SETTINGS.CURRENT_USER)
         user['score'] += MAIN_WINDOW_SETTINGS.QUESTIONS_COST
         MAIN_WINDOW_SETTINGS.db_users.update(user)

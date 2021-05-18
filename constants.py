@@ -151,6 +151,7 @@ def add_4quest():
         quest['answer'] = [MAIN_WINDOW_SETTINGS.INPUT_ANS1[0].get(), MAIN_WINDOW_SETTINGS.INPUT_ANS2[0].get(),
                            MAIN_WINDOW_SETTINGS.INPUT_ANS3[0].get(), MAIN_WINDOW_SETTINGS.INPUT_ANS4[0].get()]
         quest['correct'] = MAIN_WINDOW_SETTINGS.INPUT_CUR_ANS1[0].get()
+        quest['cost'] = int(MAIN_WINDOW_SETTINGS.COMBO_COST1[0].get())
         MAIN_WINDOW_SETTINGS.db_questions.push(quest)
         MAIN_WINDOW_SETTINGS.INPUT_QUEST[0].delete(0, END)
         MAIN_WINDOW_SETTINGS.INPUT_ANS1[0].delete(0, END)
@@ -178,6 +179,7 @@ def add_textquest():
         quest['level'] = 2
         quest['question'] = MAIN_WINDOW_SETTINGS.INPUT_QUEST0[0].get()
         quest['correct'] = MAIN_WINDOW_SETTINGS.INPUT_CUR_ANS2[0].get()
+        quest['cost'] = int(MAIN_WINDOW_SETTINGS.COMBO_COST2[0].get())
         MAIN_WINDOW_SETTINGS.db_questions.push(quest)
         MAIN_WINDOW_SETTINGS.INPUT_QUEST0[0].delete(0, END)
         MAIN_WINDOW_SETTINGS.INPUT_CUR_ANS2[0].delete(0, END)
@@ -282,11 +284,16 @@ class MAIN_WINDOW_SETTINGS:
     INPUT_CUR_ANS1 = [Combobox(MAIN_WINDOW, state="readonly") , int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 12]
     INPUT_CUR_ANS1[0]['values'] = (1, 2, 3, 4)
     INPUT_CUR_ANS1[0].current(0)
-    BUTTON_ADD_4QUEST = [Button(MAIN_WINDOW, text='Добавить вопрос в базу', command=add_4quest), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 14]
+    LABEL_COST1 = [Label(MAIN_WINDOW, text='Количество баллов за вопрос: '), int(DEFAULT_WIDTH) // 2,
+                int(DEFAULT_HEIGHT) // 20 * 14 - 20]
+    COMBO_COST1 = [Combobox(MAIN_WINDOW, state="readonly"), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 14]
+    COMBO_COST1[0]['values'] = (1, 2, 3, 4, 5)
+    COMBO_COST1[0].current(0)
+    BUTTON_ADD_4QUEST = [Button(MAIN_WINDOW, text='Добавить вопрос в базу', command=add_4quest), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 16]
     RETURN_QUEST1 = [Button(MAIN_WINDOW, text='Вернуться', command=add_test),
                      int(DEFAULT_WIDTH) // 10 * 9, int(DEFAULT_HEIGHT) // 10 * 9]
     ADD_QUEST1_STATE = [LABEL_QUEST, INPUT_QUEST, INPUT_ANS1, INPUT_ANS2, INPUT_ANS3, INPUT_ANS4, INPUT_CUR_ANS1,
-                        BUTTON_ADD_4QUEST, RETURN_QUEST1, LABEL_Q, LABEL_A1, LABEL_A2, LABEL_A3, LABEL_A4, LABEL_CA]
+                        BUTTON_ADD_4QUEST, RETURN_QUEST1, LABEL_Q, LABEL_A1, LABEL_A2, LABEL_A3, LABEL_A4, LABEL_CA, LABEL_COST1, COMBO_COST1]
 
 
     ############# ДОБАВЛЕНИЕ ВОПРОСА НА ТЕКСТОВЫЙ ОТВЕТ ##############
@@ -295,11 +302,16 @@ class MAIN_WINDOW_SETTINGS:
     INPUT_QUEST0 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 2]
     LABEL_A0 = [Label(MAIN_WINDOW, text='Ответ : '), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 4 - 20]
     INPUT_CUR_ANS2 = [Entry(MAIN_WINDOW), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 4]
+    LABEL_COST2 = [Label(MAIN_WINDOW, text='Количество баллов за вопрос: '), int(DEFAULT_WIDTH) // 2,
+                   int(DEFAULT_HEIGHT) // 20 * 6 - 20]
+    COMBO_COST2 = [Combobox(MAIN_WINDOW, state="readonly"), int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 6]
+    COMBO_COST2[0]['values'] = (1, 2, 3, 4, 5)
+    COMBO_COST2[0].current(0)
     BUTTON_ADD_TEXTQUEST = [Button(MAIN_WINDOW, text='Добавить вопрос в базу', command=add_textquest),
                          int(DEFAULT_WIDTH) // 2, int(DEFAULT_HEIGHT) // 20 * 8]
     RETURN_QUEST2 = [Button(MAIN_WINDOW, text='Вернуться', command=add_test),
                          int(DEFAULT_WIDTH) // 10 * 9, int(DEFAULT_HEIGHT) // 10 * 9]
-    ADD_QUEST2_STATE = [LABEL_QUEST0, INPUT_QUEST0, INPUT_CUR_ANS2, BUTTON_ADD_TEXTQUEST, RETURN_QUEST2, LABEL_Q2, LABEL_A0]
+    ADD_QUEST2_STATE = [LABEL_QUEST0, INPUT_QUEST0, INPUT_CUR_ANS2, BUTTON_ADD_TEXTQUEST, RETURN_QUEST2, LABEL_Q2, LABEL_A0, LABEL_COST2, COMBO_COST2]
 
 
 

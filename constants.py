@@ -56,11 +56,13 @@ def state_random_test():
     que = get_random_questions()
     if que:
         MAIN_WINDOW_SETTINGS.CURRENT_ANSWER = que['correct']
+        MAIN_WINDOW_SETTINGS.QUESTIONS_COST = que['cost']
         MAIN_WINDOW_SETTINGS.LABEL_RANDOM_QUEST[0].config(text=que['question'])
         MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_1[0].config(text='1.' + que['answer'][0])
         MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_2[0].config(text='2.' + que['answer'][1])
         MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_3[0].config(text='3.' + que['answer'][2])
         MAIN_WINDOW_SETTINGS.BUTTON_INPUT_TEST_4[0].config(text='4.' + que['answer'][3])
+
     else:
         start_state()
 
@@ -72,6 +74,7 @@ def state_write_random_test():
 
     if que:
         MAIN_WINDOW_SETTINGS.CURRENT_ANSWER = que['correct']
+        MAIN_WINDOW_SETTINGS.QUESTIONS_COST = que['cost']
         MAIN_WINDOW_SETTINGS.LABEL_RAND_QUEST[0].config(text=que['question'])
     else:
         start_state()
@@ -85,20 +88,24 @@ def state_type_question():
 def check_answer():
     if MAIN_WINDOW_SETTINGS.INPUT_CUR[0].get() == MAIN_WINDOW_SETTINGS.CURRENT_ANSWER:
         user = MAIN_WINDOW_SETTINGS.db_users.find_one('id', MAIN_WINDOW_SETTINGS.CURRENT_USER)
-        user['score'] += 1
+        user['score'] += MAIN_WINDOW_SETTINGS.QUESTIONS_COST
         MAIN_WINDOW_SETTINGS.db_users.update(user)
+        messagebox.showinfo('Поздравляем', 'Вы правильно ответили на вопрос')
         state_random_test()
     else:
+        messagebox.showinfo('Как печально', 'Вы неправильно ответили на вопрос(')
         state_random_test()
 
 
 def check_2_answer():
     if MAIN_WINDOW_SETTINGS.INPUT_ANS_QUE == MAIN_WINDOW_SETTINGS.CURRENT_ANSWER:
         user = MAIN_WINDOW_SETTINGS.db_users.find_one('id', MAIN_WINDOW_SETTINGS.CURRENT_USER)
-        user['score'] += 1
+        user['score'] += MAIN_WINDOW_SETTINGS.QUESTIONS_COST
         MAIN_WINDOW_SETTINGS.db_users.update(user)
+        messagebox.showinfo('Поздравляем', 'Вы правильно ответили на вопрос')
         state_write_random_test()
     else:
+        messagebox.showinfo('Как печально', 'Вы неправильно ответили на вопрос(')
         state_write_random_test()
 
 
@@ -158,6 +165,7 @@ def add_quest1():
     clearFrame()
     _expand_(MAIN_WINDOW_SETTINGS.ADD_QUEST1_STATE)
 
+
 def add_quest2():
     clearFrame()
     _expand_(MAIN_WINDOW_SETTINGS.ADD_QUEST2_STATE)
@@ -190,12 +198,6 @@ def add_4quest():
         add_test()
 
 
-
-
-
-
-
-
 def add_textquest():
     if (MAIN_WINDOW_SETTINGS.INPUT_QUEST0[0].get() == '' or MAIN_WINDOW_SETTINGS.INPUT_CUR_ANS2[0].get() == ''):
         MAIN_WINDOW_SETTINGS.INPUT_QUEST0[0].delete(0, END)
@@ -214,20 +216,6 @@ def add_textquest():
         add_test()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class MAIN_WINDOW_SETTINGS:
     MAIN_WINDOW = Tk()
     DEFAULT_HEIGHT = str(MAIN_WINDOW.winfo_screenheight())
@@ -237,6 +225,7 @@ class MAIN_WINDOW_SETTINGS:
     TITLE = 'Приложение для проведения тестирования'
     CURRENT_ANSWER = None
     CURRENT_USER = None
+    QUESTIONS_COST = None
 
     ##### СТАРТОВОЕ СОСТОЯНИЕ ########
     LABEL_START = [Label(MAIN_WINDOW, text='Добро пожаловать в приложение для тестирования!!!'), int(DEFAULT_WIDTH) // 2, 0]
@@ -345,12 +334,5 @@ class MAIN_WINDOW_SETTINGS:
                          int(DEFAULT_WIDTH) // 10 * 9, int(DEFAULT_HEIGHT) // 10 * 9]
     ADD_QUEST2_STATE = [LABEL_QUEST0, INPUT_QUEST0, INPUT_CUR_ANS2, BUTTON_ADD_TEXTQUEST, RETURN_QUEST2, LABEL_Q2, LABEL_A0]
 
-
     db_users = MongoDriver('app_testing', 'users')
     db_questions = MongoDriver('app_testing', 'questions')
-
-
-
-
-
-
